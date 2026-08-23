@@ -14,18 +14,20 @@ function createWindow() {
 
         webPreferences: {
             preload: path.join(__dirname, "preload.cjs"),
+            contextIsolation: true,
+            nodeIntegration: false,
         }
     });
 
     mainWindow.loadURL("http://localhost:5173");
 }
 
-ipcMain.handle("notes:create", (event, title, content) => {
-    return createNote(title, content);
-});
-
 ipcMain.handle("notes:getAll", () => {
     return getAllNotes();
+});
+
+ipcMain.handle("notes:create", (event, title, content) => {
+    return createNote(title, content);
 });
 
 app.whenReady().then(() => {

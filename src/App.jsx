@@ -1,94 +1,87 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import NoteCard from "./components/NoteCard";
+import NoteModal from "./components/NoteModal";
 import './App.css'
 
 function App() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = useState([]);
 
-  async function loadNotes() {
-    const savedNotes = await window.smartStickies.notes.getAll();
-    setNotes(savedNotes)
-  }
+    const [modalMode, setModalMode] = useState(null);
+    const [selectedNote, setSelectedNote] = useState(null);
 
-  async function handleCreateNote(event) {
-    event.preventDefault();
+    const loadNotes = async () => {
+        const savedNotes = await window.smartStickies.notes.getAll();
+        setNotes(savedNotes)
+    };
 
-    if(!title.trim()){
-      return;
-    }
+    useEffect(() => {
+        loadNotes();
+    }, []);
 
-    await window.smartStickies.notes.create(title, content);
+    const openCreateModal = () => {
+        setSelectedNote(null);
+        setModalMode("create");
+    };
 
-    setTitle();
-    setContent();
+    const openEditModal = () => {
+        setSelectedNote(null);
+        setModalMode("edit");
+    };
 
-    await loadNotes();
-  }
+    const closeModal = () => {
+        setSelectedNote(null);
+        setModalMode(null);
+    };
 
-  useEffect(() => {
-    loadNotes();
-  }, []);
+    const createNote = async (note) => {
+        await window.smartStickies.notes.create(note);
+        await loadNotes();
+        closeModal();
+    };
 
-return (
-        <div>
+    const saveNote = async (note) => {
+        await window.smartStickies.notes.update(note);
+        await loadNotes();
+        closeModal();
+    };
+
+    const deleteNote = async (id) => {
+        await window.smartStickies.notes.delete(id);
+        await loadNotes();
+        closeModal();
+    };
+
+    return (
+        <main className="app">
+        <header className="header">
             <h1>SmartStickies</h1>
 
-            <form onSubmit={handleCreateNote}>
-                <div>
-                    <label>Title</label>
-                    <br />
+            <button onClick={openCreateModal}>
+            + New Note
+            </button>
+        </header>
 
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(event) => setTitle(event.target.value)}
-                    />
-                </div>
+        <section className="note-grid">
+            {notes.map((note) => (
+            <NoteCard
+                key={note.id}
+                note={note}
+                onClick={openEditModal}
+            />
+            ))}
+        </section>
 
-                <br />
-
-                <div>
-                    <label>Content</label>
-                    <br />
-
-                    <textarea
-                        value={content}
-                        onChange={(event) => setContent(event.target.value)}
-                    />
-                </div>
-
-                <br />
-
-                <button type="submit">
-                    Create Note
-                </button>
-            </form>
-
-            <hr />
-
-            <h2>Saved Notes</h2>
-
-            {notes.length === 0 ? (
-                <p>No notes yet.</p>
-            ) : (
-                notes.map((note) => (
-                    <div key={note.id}>
-                        <h3>{note.title}</h3>
-                        <p>{note.content}</p>
-
-                        <small>
-                            ID: {note.id}
-                        </small>
-
-                        <hr />
-                    </div>
-                ))
-            )}
-        </div>
+        {modalMode && (
+            <NoteModal
+            mode={modalMode}
+            note={selectedNote}
+            onClose={closeModal}
+            onCreate={createNote}
+            onSave={saveNote}
+            onDelete={deleteNote}
+            />
+        )}
+        </main>
     );
 }
 
