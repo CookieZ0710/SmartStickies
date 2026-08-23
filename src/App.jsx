@@ -23,7 +23,7 @@ function App() {
         setModalMode("create");
     };
 
-    const openEditModal = () => {
+    const openEditModal = (note) => {
         setSelectedNote(null);
         setModalMode("edit");
     };
@@ -33,14 +33,14 @@ function App() {
         setModalMode(null);
     };
 
-    const createNote = async (note) => {
-        await window.smartStickies.notes.create(note);
+    const createNote = async (title, content) => {
+        await window.smartStickies.notes.create(title, content);
         await loadNotes();
         closeModal();
     };
 
-    const saveNote = async (note) => {
-        await window.smartStickies.notes.update(note);
+    const saveNote = async (id, title, content) => {
+        await window.smartStickies.notes.update(id, title, content);
         await loadNotes();
         closeModal();
     };

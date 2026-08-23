@@ -5,11 +5,11 @@ contextBridge.exposeInMainWorld("smartStickies", {
         getAll: () => 
             ipcRenderer.invoke("notes:getAll"),
 
-        create: (note) => 
-            ipcRenderer.invoke("notes:create", note),
+        create: (title, content) => 
+            ipcRenderer.invoke("notes:create", title, content),
 
-        update: (note) => 
-            ipcRenderer.invoke("notes:update", note),
+        update: (id, title, content) => 
+            ipcRenderer.invoke("notes:update", id, title, content),
 
         delete: (id) => 
             ipcRenderer.invoke("notes:delete", id),

@@ -18,9 +18,9 @@ function NoteModal({
 
     const handleSubmit = () => {
         if(mode === "create") {
-            onCreate({title, content});
+            onCreate(title, content);
         } else {
-            onSave({...note, title, content,});
+            onSave(...note.id, title, content);
         }
     };
 
