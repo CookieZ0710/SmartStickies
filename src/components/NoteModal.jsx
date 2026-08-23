@@ -20,7 +20,7 @@ function NoteModal({
         if(mode === "create") {
             onCreate(title, content);
         } else {
-            onSave(...note.id, title, content);
+            onSave(note.id, title, content);
         }
     };
 
@@ -43,7 +43,7 @@ function NoteModal({
                 <textarea
                     className="note-content-input"
                     value={content}
-                    onChange={(event) => setContent(EventTarget.target.value)}
+                    onChange={(event) => setContent(event.target.value)}
                     placeholder="Write something here..."
                 />
 

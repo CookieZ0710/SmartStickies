@@ -24,7 +24,7 @@ function App() {
     };
 
     const openEditModal = (note) => {
-        setSelectedNote(null);
+        setSelectedNote(note);
         setModalMode("edit");
     };
 
