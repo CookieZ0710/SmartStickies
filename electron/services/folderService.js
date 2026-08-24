@@ -1,61 +1,61 @@
 import { getDatabase } from "../db/database.js";
 
-export function getAllNotes() {
+export function getAllFolders() {
     const db = getDatabase();
 
     const statement = db.prepare(`
-        SELECT * FROM notes
-        ORDER BY created_at DESC
+        SELECT * FROM folders
+        ORDER BY created_at ASC
     `);
 
     return statement.all();
 }
 
-export function createNote(title, content = "") {
+export function createFolder(name) {
+    if (!name || !name.trim()) {
+        throw new Error("Folder name cannot be empty.");
+    }
+    
     const db = getDatabase();
 
     const now = new Date().toISOString();
 
     const statement = db.prepare(`
         INSERT INTO notes (
-            title,
-            content,
+            name,
             created_at,
             updated_at
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?)
     `);
 
     const result = statement.run(
-        title, 
-        content, 
+        name,
         now, 
         now
     );
 
     return {
         id: result.lastInsertRowid,
-        title,
-        content,
+        name,
         created_at: now,
         updated_at: now
     };
 }
 
-export function updateNote(id, title, content = "") {
+export function updateFolder(id, name) {
     const db = getDatabase();
 
     const now = new Date().toISOString();
 
     const statement = db.prepare(`
-        UPDATE notes
-        SET title = ?, content = ?, updated_at = ?
+        UPDATE folders
+        SET name = ?, updated_at = ?
         WHERE id = ?
     `);
 
     const result = statement.run(
-        title, 
-        content, 
+        name,
         now, 
         id
     );
@@ -63,35 +63,15 @@ export function updateNote(id, title, content = "") {
     return result.changes;
 }
 
-export function deleteNote(id) {
+export function deleteFolder(id) {
     const db = getDatabase();   
 
     const statement = db.prepare(`
-        DELETE FROM notes
+        DELETE FROM folders
         WHERE id = ?
     `);
 
     const result = statement.run(id);
-
-    return result.changes;
-}
-
-export function moveNote(noteId, folderId) {
-    const db = getDatabase();
-
-    const now = new Date().toISOString();
-
-    const statement = db.prepare(`
-        UPDATE notes
-        SET folder_id = ?, updated_at = ?
-        WHERE id = ?
-    `);
-
-    const result = statement.run(
-        folderId, 
-        now, 
-        noteId
-    );  
 
     return result.changes;
 }
