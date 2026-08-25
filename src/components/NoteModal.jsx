@@ -18,7 +18,7 @@ function NoteModal({
     );
 
     const [folderId, setFolderId] = useState(
-        mode === "edit" ? note?.folderId ?? null : null
+        mode === "edit" ? note?.folder_id ?? null : null
     );
 
     const handleSubmit = () => {

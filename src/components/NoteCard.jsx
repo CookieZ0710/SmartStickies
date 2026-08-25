@@ -1,6 +1,6 @@
 function NoteCard({note, folder, onClick}) {
     return (
-        <div className="note-card">
+        <div className="note-card" onClick={() => onClick(note)}>
             <div className="note-card-content">
                 <h2>{note.title || "Untitled"}</h2>
                 <p>{note.content || "Empty Note"}</p>
