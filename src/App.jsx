@@ -1,87 +1,44 @@
 import { useEffect, useState } from 'react'
-import NoteCard from "./components/NoteCard";
-import NoteModal from "./components/NoteModal";
+
+import Sidebar from "./components/Sidebar";
+import NotesPage from './pages/NotesPage';
+import FoldersPage from './pages/FoldersPage';
+
 import './App.css'
 
 function App() {
-    const [notes, setNotes] = useState([]);
+    const [currentPage, setCurrentPage] = useState("notes");
+    const [sidebarOpen, setSidebarOpen] = useState("false");
 
-    const [modalMode, setModalMode] = useState(null);
-    const [selectedNote, setSelectedNote] = useState(null);
-
-    const loadNotes = async () => {
-        const savedNotes = await window.smartStickies.notes.getAll();
-        setNotes(savedNotes)
+    const handleNavigate = (page) => {
+        setCurrentPage(page);
+        setSidebarOpen(false);
     };
 
-    useEffect(() => {
-        loadNotes();
-    }, []);
-
-    const openCreateModal = () => {
-        setSelectedNote(null);
-        setModalMode("create");
-    };
-
-    const openEditModal = (note) => {
-        setSelectedNote(note);
-        setModalMode("edit");
-    };
-
-    const closeModal = () => {
-        setSelectedNote(null);
-        setModalMode(null);
-    };
-
-    const createNote = async (title, content) => {
-        await window.smartStickies.notes.create(title, content);
-        await loadNotes();
-        closeModal();
-    };
-
-    const saveNote = async (id, title, content) => {
-        await window.smartStickies.notes.update(id, title, content);
-        await loadNotes();
-        closeModal();
-    };
-
-    const deleteNote = async (id) => {
-        await window.smartStickies.notes.delete(id);
-        await loadNotes();
-        closeModal();
-    };
-
-    return (
-        <main className="app">
-        <header className="header">
-            <h1>SmartStickies</h1>
-
-            <button onClick={openCreateModal}>
-            + New Note
+    return(
+        <div className="app">
+            <button
+                className="menu-button"
+                onClick={() => setSidebarOpen(true)}
+            >
+                ☰
             </button>
-        </header>
 
-        <section className="note-grid">
-            {notes.map((note) => (
-            <NoteCard
-                key={note.id}
-                note={note}
-                onClick={openEditModal}
+            <Sidebar
+                isOpen={sidebarOpen}
+                currentPage={currentPage}
+                onNavigate={handleNavigate}
+                onClose={() => setSidebarOpen(false)}
             />
-            ))}
-        </section>
 
-        {modalMode && (
-            <NoteModal
-            mode={modalMode}
-            note={selectedNote}
-            onClose={closeModal}
-            onCreate={createNote}
-            onSave={saveNote}
-            onDelete={deleteNote}
-            />
-        )}
-        </main>
+            {currentPage === "notes" && (
+                <NotesPage />
+            )}
+
+            {currentPage === "folders" && (
+                <FoldersPage />
+            )}
+        </div>
     );
 }
 

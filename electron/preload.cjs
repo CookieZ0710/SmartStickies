@@ -13,5 +13,22 @@ contextBridge.exposeInMainWorld("smartStickies", {
 
         delete: (id) => 
             ipcRenderer.invoke("notes:delete", id),
+
+        move: (noteId, folderId) => 
+            ipcRenderer.invoke("notes:move", noteId, folderId)
     },
+
+    folders: {
+        getAll: () => 
+            ipcRenderer.invoke("folders:getAll"),
+
+        create: (name) => 
+            ipcRenderer.invoke("folders:create", name),
+
+        update: (id, name) => 
+            ipcRenderer.invoke("folders:update", id, name),
+
+        delete: (id) => 
+            ipcRenderer.invoke("folders:delete", id)
+    }
 });

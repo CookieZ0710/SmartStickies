@@ -31,6 +31,138 @@ button {
   font-size: 42px;
 }
 
+.menu-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+
+  z-index: 50;
+
+  border: none;
+  background: none;
+
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 260px;
+  height: 100vh;
+
+  background: white;
+  border-right: 1px solid black;
+
+  padding: 20px;
+
+  z-index: 100;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-close-button {
+  border: none;
+  background: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin-top: 30px;
+}
+
+.sidebar-link {
+  padding: 12px;
+
+  border: none;
+  background: none;
+
+  text-align: left;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar-link.active {
+  font-weight: bold;
+  background: #ddd;
+}
+
+.folder-section {
+  margin-bottom: 60px;
+}
+
+.folder-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+
+.folder-section-header h2 {
+  margin: 0;
+}
+
+.folder-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.folder-note-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.empty-folder {
+  opacity: 0.6;
+}
+
+.folder-modal {
+  width: 400px;
+
+  background: white;
+  border: 1px solid black;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.folder-modal input {
+  padding: 12px;
+  font-size: 18px;
+}
+
+.folders-page {
+  min-height: 100vh;
+  padding: 40px 60px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 50px;
+}
+
 .note-grid {
   display: grid;
   grid-template-columns: repeat(3, 280px);

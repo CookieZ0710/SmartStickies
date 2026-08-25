@@ -21,7 +21,7 @@ export function createFolder(name) {
     const now = new Date().toISOString();
 
     const statement = db.prepare(`
-        INSERT INTO notes (
+        INSERT INTO folders (
             name,
             created_at,
             updated_at
