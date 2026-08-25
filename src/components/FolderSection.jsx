@@ -12,15 +12,17 @@ function FolderSection({
             <div className="folder-section-header">
                 <h2>{folder.name}</h2>
 
-                <div className="folder-actions">
-                <button onClick={() => onEditFolder(folder)}>
-                    Edit
-                </button>
+                {folder.id !== null && (
+                    <div className="folder-actions">
+                        <button onClick={() => onEditFolder(folder)}>
+                            Edit
+                        </button>
 
-                <button onClick={() => onDeleteFolder(folder.id)}>
-                    Delete
-                </button>
-                </div>
+                        <button onClick={() => onDeleteFolder(folder.id)}>
+                            Delete
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="folder-note-grid">

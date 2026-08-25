@@ -1,13 +1,14 @@
-function NoteCard({note, onClick}) {
+function NoteCard({note, folder, onClick}) {
     return (
-        <div
-            className="note-card"
-            onClick={() => onClick(note)}
-        >
-            <h2>{note.title || "Untitled"}</h2>
-            <p>
-                {note.content || "Empty Note"}
-            </p>
+        <div className="note-card">
+            <div className="note-card-content">
+                <h2>{note.title || "Untitled"}</h2>
+                <p>{note.content || "Empty Note"}</p>
+            </div>
+
+            <div className="note-folder-footer">
+                {folder?.name ?? ""}
+            </div>
         </div>
     );
 }

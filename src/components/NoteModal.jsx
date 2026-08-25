@@ -3,6 +3,7 @@ import { useState } from "react";
 function NoteModal({
     mode,
     note,
+    folders = [],
     onClose,
     onCreate,
     onSave,
@@ -16,11 +17,20 @@ function NoteModal({
         mode === "edit" ? note?.content ?? "" : ""
     );
 
+    const [folderId, setFolderId] = useState(
+        mode === "edit" ? note?.folderId ?? null : null
+    );
+
     const handleSubmit = () => {
+        if(!title.trim() && !content.trim()){
+            onClose();
+            return;
+        }
+
         if(mode === "create") {
-            onCreate(title, content);
+            onCreate(title, content, folderId);
         } else {
-            onSave(note.id, title, content);
+            onSave(note.id, title, content, folderId);
         }
     };
 
@@ -48,6 +58,30 @@ function NoteModal({
                 />
 
                 <div className="modal-actions">
+                    <select
+                        value={folderId ?? ""}
+                        onChange={(event) =>
+                            setFolderId(
+                            event.target.value === ""
+                                ? null
+                                : Number(event.target.value)
+                            )
+                        }
+                        >
+                        <option value="">
+                            Uncategorized
+                        </option>
+
+                        {folders.map((folder) => (
+                            <option
+                            key={folder.id}
+                            value={folder.id}
+                            >
+                            {folder.name}
+                            </option>
+                        ))}
+                    </select>
+
                     {mode === "edit" && (
                         <button
                             className="delete-button"

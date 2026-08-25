@@ -249,9 +249,12 @@ button {
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   gap: 20px;
+}
+
+.modal-actions select {
+  margin-right: auto;
 }
 
 .delete-button {

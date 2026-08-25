@@ -8,7 +8,7 @@ import './App.css'
 
 function App() {
     const [currentPage, setCurrentPage] = useState("notes");
-    const [sidebarOpen, setSidebarOpen] = useState("false");
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleNavigate = (page) => {
         setCurrentPage(page);

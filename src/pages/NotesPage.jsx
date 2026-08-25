@@ -5,9 +5,15 @@ import NoteModal from "../components/NoteModal";
 
 function NotesPage() {
     const [notes, setNotes] = useState([]);
+    const [folders, setFolders] = useState([]);
 
     const [modalMode, setModalMode] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
+
+    const loadFolders = async () => {
+        const savedFolders = await window.smartStickies.folders.getAll();
+        setFolders(savedFolders);
+    };
 
     const loadNotes = async () => {
         const savedNotes = await window.smartStickies.notes.getAll();
@@ -15,6 +21,7 @@ function NotesPage() {
     };
 
     useEffect(() => {
+        loadFolders();
         loadNotes();
     }, []);
 
@@ -33,14 +40,18 @@ function NotesPage() {
         setModalMode(null);
     };
 
-    const createNote = async (title, content) => {
-        await window.smartStickies.notes.create(title, content);
+    const createNote = async (title, content, folderId) => {
+        const newNote = await window.smartStickies.notes.create(title, content);
+        if (folderId !== null) {
+            await window.smartStickies.notes.move(newNote.id, folderId);
+        }
         await loadNotes();
         closeModal();
     };
 
-    const saveNote = async (id, title, content) => {
+    const saveNote = async (id, title, content, folderId) => {
         await window.smartStickies.notes.update(id, title, content);
+        await window.smartStickies.notes.move(id, folderId);
         await loadNotes();
         closeModal();
     };
@@ -62,19 +73,28 @@ function NotesPage() {
         </header>
 
         <section className="note-grid">
-            {notes.map((note) => (
+            {notes.map((note) => {
+                const folder = folders.find(
+                (folder) =>
+                    folder.id === note.folder_id
+                );
+
+                return (
                 <NoteCard
                     key={note.id}
                     note={note}
+                    folder={folder}
                     onClick={openEditModal}
                 />
-            ))}
+                );
+            })}
         </section>
 
         {modalMode && (
             <NoteModal
             mode={modalMode}
             note={selectedNote}
+            folders={folders}
             onClose={closeModal}
             onCreate={createNote}
             onSave={saveNote}

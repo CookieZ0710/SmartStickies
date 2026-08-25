@@ -39,8 +39,8 @@ function FoldersPage(){
         setFolderModalMode("create");
     };
 
-    const openEditFolderModal = () => {
-        setSelectedFolder(null);
+    const openEditFolderModal = (folder) => {
+        setSelectedFolder(folder);
         setFolderModalMode("edit");
     };
 
@@ -74,8 +74,9 @@ function FoldersPage(){
         setSelectedNote(null);
     };
 
-    const saveNote = async (id, title, content) => {
+    const saveNote = async (id, title, content, folderId) => {
         await window.smartStickies.notes.update(id, title, content);
+        await window.smartStickies.notes.move(id, folderId);
         await loadNotes();
         closeNoteModal();
     };
@@ -142,6 +143,7 @@ function FoldersPage(){
                 <NoteModal
                 mode="edit"
                 note={selectedNote}
+                folders={folders}
                 onClose={closeNoteModal}
                 onSave={saveNote}
                 onDelete={deleteNote}
