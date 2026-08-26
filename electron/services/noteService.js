@@ -11,7 +11,11 @@ export function getAllNotes() {
     return statement.all();
 }
 
-export function createNote(title, content = "") {
+export function createNote(
+    title, 
+    content = "",
+    color = "#FFE45C"
+) {
     const db = getDatabase();
 
     const now = new Date().toISOString();
@@ -20,15 +24,17 @@ export function createNote(title, content = "") {
         INSERT INTO notes (
             title,
             content,
+            color,
             created_at,
             updated_at
         )
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?)
     `);
 
     const result = statement.run(
         title, 
         content, 
+        color,
         now, 
         now
     );
@@ -37,25 +43,33 @@ export function createNote(title, content = "") {
         id: result.lastInsertRowid,
         title,
         content,
+        color,
+        folder_id: null,
         created_at: now,
         updated_at: now
     };
 }
 
-export function updateNote(id, title, content = "") {
+export function updateNote(
+    id, 
+    title, 
+    content = "",
+    color = "#FFE45C"
+) {
     const db = getDatabase();
 
     const now = new Date().toISOString();
 
     const statement = db.prepare(`
         UPDATE notes
-        SET title = ?, content = ?, updated_at = ?
+        SET title = ?, content = ?, color = ?, updated_at = ?
         WHERE id = ?
     `);
 
     const result = statement.run(
         title, 
         content, 
+        color,
         now, 
         id
     );

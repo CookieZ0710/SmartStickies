@@ -40,8 +40,8 @@ function NotesPage() {
         setModalMode(null);
     };
 
-    const createNote = async (title, content, folderId) => {
-        const newNote = await window.smartStickies.notes.create(title, content);
+    const createNote = async (title, content, color, folderId) => {
+        const newNote = await window.smartStickies.notes.create(title, content, color);
         if (folderId !== null) {
             await window.smartStickies.notes.move(newNote.id, folderId);
         }
@@ -49,8 +49,8 @@ function NotesPage() {
         closeModal();
     };
 
-    const saveNote = async (id, title, content, folderId) => {
-        await window.smartStickies.notes.update(id, title, content);
+    const saveNote = async (id, title, content, color, folderId) => {
+        await window.smartStickies.notes.update(id, title, content, color);
         await window.smartStickies.notes.move(id, folderId);
         await loadNotes();
         closeModal();
@@ -65,7 +65,7 @@ function NotesPage() {
     return (
         <main className="notes-page">
         <header className="page-header">
-            <h1>SmartStickies</h1>
+            <h1>Notes</h1>
 
             <button onClick={openCreateModal}>
                 + New Note

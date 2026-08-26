@@ -28,12 +28,12 @@ ipcMain.handle("notes:getAll", () => {
     return getAllNotes();
 });
 
-ipcMain.handle("notes:create", (event, title, content) => {
-    return createNote(title, content);
+ipcMain.handle("notes:create", (event, title, content, color) => {
+    return createNote(title, content, color);
 });
 
-ipcMain.handle("notes:update", (event, id, title, content) => {
-    return updateNote(id, title, content);
+ipcMain.handle("notes:update", (event, id, title, content, color) => {
+    return updateNote(id, title, content, color);
 });
 
 ipcMain.handle("notes:delete", (event, id) => {

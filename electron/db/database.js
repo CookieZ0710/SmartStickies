@@ -23,6 +23,7 @@ export function initializeDatabase() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             content TEXT DEFAULT '',
+            color TEXT NOT NULL DEFAULT '#FFE45C',
             folder_id INTEGER NULL,
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
@@ -33,7 +34,7 @@ export function initializeDatabase() {
         );
     `);
 
-    const noteColumns = db.prepare("PRAGMA table_info(notes)").all();
+    let noteColumns = db.prepare("PRAGMA table_info(notes)").all();
 
     const hasFolderId = noteColumns.some((column) => column.name === "folder_id");
 
@@ -47,6 +48,22 @@ export function initializeDatabase() {
 
         console.log(
             "Database migration: added folder_id to notes."
+        );
+    }
+
+    // Refresh after possible migration
+    noteColumns = db.prepare("PRAGMA table_info(notes)").all();
+
+    const hasColor = noteColumns.some((column) => column.name === "color");
+
+    if(!hasColor) {
+        db.exec(`
+            ALTER TABLE notes 
+            ADD COLUMN color TEXT NOT NULL DEFAULT '#FFE45C'
+        `);
+
+        console.log(
+            "Database migration: added color to notes."
         );
     }
 

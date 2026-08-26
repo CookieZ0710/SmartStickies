@@ -74,8 +74,8 @@ function FoldersPage(){
         setSelectedNote(null);
     };
 
-    const saveNote = async (id, title, content, folderId) => {
-        await window.smartStickies.notes.update(id, title, content);
+    const saveNote = async (id, title, content, color, folderId) => {
+        await window.smartStickies.notes.update(id, title, content, color);
         await window.smartStickies.notes.move(id, folderId);
         await loadNotes();
         closeNoteModal();
