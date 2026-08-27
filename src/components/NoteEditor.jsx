@@ -17,7 +17,51 @@ function NoteEditor({
 
     return (
         <div className="note-editor">
-            <EditorContent editor={editor}/>
+            <div className="editor-toolbar">
+                <button
+                    type="button"
+                    className={
+                        editor.isActive("bold")
+                            ? "editor-button active"
+                            : "editor-button"
+                    }
+                    onClick={() =>
+                        editor.chain().focus().toggleBold().run()
+                    }
+                >
+                    B
+                </button>
+
+                <button
+                    type="button"
+                    className={
+                        editor.isActive("italic")
+                            ? "editor-button active"
+                            : "editor-button"
+                    }
+                    onClick={() =>
+                        editor.chain().focus().toggleItalic().run()
+                    }
+                >
+                    I
+                </button>
+
+                <button
+                    type="button"
+                    className={
+                        editor.isActive("strike")
+                            ? "editor-button active"
+                            : "editor-button"
+                    }
+                    onClick={() =>
+                        editor.chain().focus().toggleStrike().run()
+                    }
+                >
+                    S
+                </button>
+            </div>
+
+            <EditorContent editor={editor} />
         </div>
     );
 }

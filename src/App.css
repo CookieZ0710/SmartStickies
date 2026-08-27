@@ -219,6 +219,21 @@
   opacity: 0.65;
 }
 
+.note-preview {
+  flex: 1;
+  overflow: hidden;
+}
+
+.note-preview .ProseMirror {
+  outline: none;
+  font-size: inherit;
+  line-height: 1.45;
+}
+
+.note-preview .ProseMirror p {
+  margin: 0 0 8px;
+}
+
 .folder-section {
   margin-bottom: 55px;
 }
@@ -346,6 +361,43 @@
 
 .note-editor .ProseMirror p {
     margin: 0 0 10px;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.editor-button {
+  width: 34px;
+  height: 30px;
+
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+
+  background: rgba(255, 255, 255, 0.35);
+  color: #181818;
+
+  font-weight: bold;
+}
+
+.editor-button:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.editor-button.active {
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+}
+
+.editor-button:nth-child(2) {
+  font-style: italic;
+}
+
+.editor-button:nth-child(3) {
+  text-decoration: line-through;
 }
 
 .modal-actions {
