@@ -6,16 +6,9 @@ function NoteEditor({
     onChange
 }) {
     const editor = useEditor({
-        extensions: [StarterKit.configure({
-                trailingNode: false,
-            }),
-        ],
+        extensions: [StarterKit],
         content: initialContent,
-        enableContentCheck: true,
-        onUpdate: ({ editor}) => {onChange(editor.getJSON());},
-        onContentError: ({error}) => {
-            console.error("Invalid TipTap content:", error);
-        },
+        onUpdate: ({ editor }) => {onChange(editor.getJSON());},
     });
 
     if (!editor){

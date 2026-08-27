@@ -15,31 +15,68 @@ export function parseNoteContent(content) {
     try {
         const parsed = JSON.parse(content);
 
-        if (
-            parsed && parsed.type === "doc" && Array.isArray(parsed.content)
-        ) {
+        const validDoc =
+            parsed &&
+            parsed.type === "doc" &&
+            Array.isArray(parsed.content) &&
+            parsed.content.every(
+                node => node.type !== "text"
+            );
+
+        if (validDoc) {
             return parsed;
         }
 
-        return emptyDocument;
-    } catch {
+        const text = extractText(parsed);
+
         return {
             type: "doc",
             content: [
                 {
                     type: "paragraph",
-                    content: content
+                    content: text
                     ? [
                         {
                             type: "text",
-                            text: content
+                            text
                         }
                     ]
                     : undefined
                 }
             ]
         };
+    } catch {
+        return {
+            type: "doc",
+            content: [
+                {
+                    type: "paragraph",
+                    content: [
+                        {
+                            type: "text",
+                            text: content
+                        }
+                    ]
+                }
+            ]
+        };
     }
+}
+
+function extractText(node) {
+    if (!node) {
+        return "";
+    }
+
+    if (node.type === "text") {
+        return node.text ?? "";
+    }
+
+    if (!Array.isArray(node.content)) {
+        return "";
+    }
+
+    return node.content.map(extractText).join("");
 }
 
 export function getNotePreview(content) {
