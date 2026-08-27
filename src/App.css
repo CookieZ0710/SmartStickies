@@ -234,6 +234,50 @@
   margin: 0 0 8px;
 }
 
+.note-editor ul[data-type="taskList"],
+.note-preview ul[data-type="taskList"] {
+    list-style: none;
+
+    padding: 0;
+    margin: 8px 0;
+}
+
+.note-editor ul[data-type="taskList"] li,
+.note-preview ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-bottom: 6px;
+}
+
+.note-editor ul[data-type="taskList"] li > label,
+.note-preview ul[data-type="taskList"] li > label {
+    margin-top: 3px;
+}
+
+.note-editor ul[data-type="taskList"] li > div,
+.note-preview ul[data-type="taskList"] li > div {
+    flex: 1;
+}
+
+.note-editor ul[data-type="taskList"] p,
+.note-preview ul[data-type="taskList"] p {
+    margin: 0;
+}
+
+.note-preview ul[data-type="taskList"] input[type="checkbox"] {
+  pointer-events: none;
+  margin-top: 3px;
+}
+
+.note-editor ul[data-type="taskList"] input[type="checkbox"],
+.note-preview ul[data-type="taskList"] input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
 .folder-section {
   margin-bottom: 55px;
 }

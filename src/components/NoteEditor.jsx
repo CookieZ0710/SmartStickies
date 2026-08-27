@@ -1,12 +1,19 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import TaskList from "@tiptap/extension-task-list";
+import TaskItem from "@tiptap/extension-task-item";
+
 
 function NoteEditor({
     initialContent,
     onChange
 }) {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            TaskList,
+            TaskItem.configure({nested: true,}),
+        ],
         content: initialContent,
         onUpdate: ({ editor }) => {onChange(editor.getJSON());},
     });
@@ -58,6 +65,20 @@ function NoteEditor({
                     }
                 >
                     S
+                </button>
+
+                <button
+                    type="button"
+                    className={
+                        editor.isActive("taskList")
+                            ? "editor-button active"
+                            : "editor-button"
+                    }
+                    onClick={() =>
+                        editor.chain().focus().toggleTaskList().run()
+                    }
+                >
+                    ☑
                 </button>
             </div>
 
