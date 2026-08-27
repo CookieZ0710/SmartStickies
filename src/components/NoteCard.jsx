@@ -1,3 +1,5 @@
+import { getNotePreview } from "../utils/noteContent";
+
 function NoteCard({note, folder, onClick}) {
     return (
         <div 
@@ -7,7 +9,7 @@ function NoteCard({note, folder, onClick}) {
         >
             <div className="note-card-content">
                 <h2>{note.title || "Untitled"}</h2>
-                <p>{note.content || "Empty Note"}</p>
+                <p>{getNotePreview(note.content) || "Empty Note"}</p>
             </div>
 
             <div className="note-folder-footer">

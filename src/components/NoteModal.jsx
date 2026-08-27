@@ -1,4 +1,6 @@
 import { useState } from "react";
+import NoteEditor from "./NoteEditor";
+import { parseNoteContent } from "../utils/noteContent";
 
 function NoteModal({
     mode,
@@ -14,7 +16,9 @@ function NoteModal({
     );
 
     const [content, setContent] = useState(
-        mode === "edit" ? note?.content ?? "" : ""
+        mode === "edit" 
+        ? parseNoteContent(note?.content) 
+        : parseNoteContent("")
     );
 
     const [color, setColor] = useState(
@@ -26,15 +30,12 @@ function NoteModal({
     );
 
     const handleSubmit = () => {
-        if(!title.trim() && !content.trim()){
-            onClose();
-            return;
-        }
+        const serializedContent = JSON.stringify(content);
 
         if(mode === "create") {
-            onCreate(title, content, color, folderId);
+            onCreate(title, serializedContent, color, folderId);
         } else {
-            onSave(note.id, title, content, color, folderId);
+            onSave(note.id, title, serializedContent, color, folderId);
         }
     };
 
@@ -55,11 +56,9 @@ function NoteModal({
                     placeholder="Title"
                 />
 
-                <textarea
-                    className="note-content-input"
-                    value={content}
-                    onChange={(event) => setContent(event.target.value)}
-                    placeholder="Write something here..."
+                <NoteEditor
+                    initialContent={content}
+                    onChange={setContent}
                 />
 
                 <div className="modal-actions">

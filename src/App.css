@@ -328,6 +328,26 @@
   line-height: 1.5;
 }
 
+.note-editor {
+    flex: 1;
+    min-height: 240px;
+}
+
+.note-editor .ProseMirror {
+    min-height: 240px;
+
+    outline: none;
+
+    color: inherit;
+
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.note-editor .ProseMirror p {
+    margin: 0 0 10px;
+}
+
 .modal-actions {
   display: flex;
   align-items: center;
