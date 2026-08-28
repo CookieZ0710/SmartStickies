@@ -1,6 +1,14 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("smartStickies", {
+    images: {
+        import: () => 
+            ipcRenderer.invoke("images:import"),
+
+        saveClipboard: (buffer, extension) =>
+            ipcRenderer.invoke("images:saveClipboard",buffer, extension)
+    },
+
     notes: {
         getAll: () => 
             ipcRenderer.invoke("notes:getAll"),

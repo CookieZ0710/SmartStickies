@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import { parseNoteContent } from "../utils/noteContent";
@@ -9,11 +11,20 @@ function NotePreview({ content }) {
         extensions: [
             StarterKit,
             TaskList,
-            TaskItem.configure({nested: true,}),
+            TaskItem.configure({nested: true}),
+            Image
         ],
         content: parseNoteContent(content),
         editable: false,
     });
+
+    useEffect(() => {
+        if (!editor){
+            return;
+        }
+        
+        editor.commands.setContent(parseNoteContent(content));
+    }, [editor, content]);
 
     if (!editor) {
         return null;
