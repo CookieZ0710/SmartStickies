@@ -112,14 +112,13 @@ export function moveNote(noteId, folderId) {
 
 export function getNotesById(id) {
     const db = getDatabase();
-    const now = new Date().toISOString();
+
     const statement = db.prepare(`
         SELECT * FROM notes
         WHERE id = ?
     `);
 
-    const result = statement.run(id);
-    return result.changes;
+    return statement.get(id);
 }
 
 export function pinNote(id) {

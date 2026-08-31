@@ -498,3 +498,58 @@
 .modal-actions button:hover {
   background: rgba(255, 255, 255, 0.65);
 }
+
+.pinned-note {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    overflow: auto;
+}
+
+.pinned-note-controls {
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
+
+    display: flex;
+    gap: 8px;
+
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.pinned-note:hover .pinned-note-controls {
+    opacity: 1;
+}
+
+.pinned-control-button {
+    border: none;
+    background: transparent;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.pinned-note-drag-region {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 34px;
+
+    -webkit-app-region: drag;
+}
+
+.pinned-note-controls {
+    -webkit-app-region: no-drag;
+}
