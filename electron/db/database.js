@@ -25,6 +25,7 @@ export function initializeDatabase() {
             content TEXT DEFAULT '',
             color TEXT NOT NULL DEFAULT '#FFE45C',
             folder_id INTEGER NULL,
+            is_pinned INTEGER NOT NULL DEFAULT 0,
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL,
 
@@ -64,6 +65,22 @@ export function initializeDatabase() {
 
         console.log(
             "Database migration: added color to notes."
+        );
+    }
+
+    // Refresh after possible migration
+    noteColumns = db.prepare("PRAGMA table_info(notes)").all();
+
+    const hasIsPinned = noteColumns.some((column) => column.name === "is_pinned");
+
+    if(!hasIsPinned) {
+        db.exec(`
+            ALTER TABLE notes 
+            ADD COLUMN is_pinned INTEGER NOT NULL DEFAULT 0
+        `);
+
+        console.log(
+            "Database migration: added is_pinned to notes."
         );
     }
 

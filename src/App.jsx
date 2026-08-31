@@ -3,10 +3,26 @@ import { useEffect, useState } from 'react'
 import Sidebar from "./components/Sidebar";
 import NotesPage from './pages/NotesPage';
 import FoldersPage from './pages/FoldersPage';
+import PinnedNotePage from './pages/PinnedNotePage';
 
 import './App.css'
 
 function App() {
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const pinnedNoteId =
+        params.get("pinnedNote");
+
+    if (pinnedNoteId) {
+        return (
+            <PinnedNotePage
+                noteId={Number(pinnedNoteId)}
+            />
+        );
+    }
+
+    
     const [currentPage, setCurrentPage] = useState("notes");
     const [sidebarOpen, setSidebarOpen] = useState(false);
 

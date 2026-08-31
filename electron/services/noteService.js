@@ -109,3 +109,57 @@ export function moveNote(noteId, folderId) {
 
     return result.changes;
 }
+
+export function getNotesById(id) {
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    const statement = db.prepare(`
+        SELECT * FROM notes
+        WHERE id = ?
+    `);
+
+    const result = statement.run(id);
+    return result.changes;
+}
+
+export function pinNote(id) {
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    const statement = db.prepare(`
+        UPDATE notes
+        SET
+            is_pinned = 1, 
+            updated_at = ?
+        WHERE id = ?
+    `);
+
+    const result = statement.run(now, id);
+    return result.changes;
+}
+
+export function unpinNote(id) {
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    const statement = db.prepare(`
+        UPDATE notes
+        SET
+            is_pinned = 0, 
+            updated_at = ?
+        WHERE id = ?
+    `);
+
+    const result = statement.run(now, id);
+    return result.changes;
+}
+
+export function getPinnedNotes() {
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    const statement = db.prepare(`
+        SELECT * FROM notes
+        WHERE is_pinned = 1
+        ORDER BY updated_at DESC
+    `);
+
+    return statement.all();
+}

@@ -4,7 +4,8 @@ import fs from "fs";
 import path from "path";
 import { initializeDatabase } from "./db/database.js";
 import { importImage, saveClipboardImage } from "./services/imageService.js";
-import { getAllNotes, createNote, updateNote, deleteNote, moveNote } from "./services/noteService.js";
+import {createPinnedWindow, closePinnedWindow} from "./services/pinnedWindowManager.js";
+import { getAllNotes, createNote, updateNote, deleteNote, moveNote, getNotesById, pinNote, unpinNote, getPinnedNotes } from "./services/noteService.js";
 import { getAllFolders, createFolder, updateFolder, deleteFolder } from "./services/folderService.js"
 
 const __filename = fileURLToPath(import.meta.url);
@@ -57,6 +58,33 @@ ipcMain.handle("notes:move", (event, noteId, folderId) => {
     return moveNote(noteId, folderId);
 });
 
+ipcMain.handle("notes:getById", (event, id) => {
+    return getNotesById(id);
+});
+
+ipcMain.handle("notes:pin", (event, id) => {
+    const changes = pinNote(id);
+
+    if(changes > 0) {
+        createPinnedWindow(id);
+    }
+
+    return changes;
+});
+
+ipcMain.handle("notes:unpin", (event, id) => {
+    const changes = unpinNote(id);
+
+    if(changes > 0) {
+        closePinnedWindow(id);
+    }
+
+    return changes;
+});
+
+ipcMain.handle("notes:getPinned", () => {
+    return getPinnedNotes();
+});
 
 // IPC FOR FOLDERS
 ipcMain.handle("folders:getAll", () => {
