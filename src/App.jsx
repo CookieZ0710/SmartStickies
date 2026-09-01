@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Sidebar from "./components/Sidebar";
 import NotesPage from './pages/NotesPage';
 import FoldersPage from './pages/FoldersPage';
+import PinnedPage from './pages/PinnedPage';
 import PinnedNotePage from './pages/PinnedNotePage';
 
 import './App.css'
@@ -53,6 +54,10 @@ function App() {
 
             {currentPage === "folders" && (
                 <FoldersPage />
+            )}
+
+            {currentPage === "pinned" && (
+                <PinnedPage />
             )}
         </div>
     );

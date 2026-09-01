@@ -26,15 +26,19 @@ function NotesPage() {
     }, []);
 
     useEffect(() => {
-        const handleOpenEditor = async (noteId) => {
-            const note = await window.smartStickies.notes.getById(noteId);
+    const cleanup =
+        window.smartStickies.notes.onPinStatusChanged(
+            async (id) => {
+                await loadNotes();
 
-            if(note) {
-                openEditModal(note);
+                if (selectedNote?.id === id) {
+                    const updatedNote =
+                        await window.smartStickies.notes.getById(id);
+
+                    setSelectedNote(updatedNote);
+                }
             }
-        };
-
-        const cleanup = window.smartStickies.notes.onOpenEditor(handleOpenEditor);
+        );
         
         return cleanup;
     }, []);
@@ -76,6 +80,19 @@ function NotesPage() {
         closeModal();
     };
 
+    const togglePin = async (note) => {
+        if(note.is_pinned) {
+            await window.smartStickies.notes.unpin(note.id);
+        }else {
+            await window.smartStickies.notes.pin(note.id);
+        }
+
+        const updatedNote = await window.smartStickies.notes.getById(note.id);
+        setSelectedNote(updatedNote);
+
+        await loadNotes();
+    }
+
     return (
         <main className="notes-page">
         <header className="page-header">
@@ -113,6 +130,7 @@ function NotesPage() {
             onCreate={createNote}
             onSave={saveNote}
             onDelete={deleteNote}
+            onTogglePin={togglePin}
             />
         )}
         </main>

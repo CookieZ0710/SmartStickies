@@ -32,15 +32,6 @@ function PinnedNotePage() {
                 <button
                     type="button"
                     className="pinned-control-button"
-                    title="Edit note"
-                    onClick={() => {window.smartStickies.notes.openEditor(note.id);}}
-                >
-                    ✎
-                </button>
-
-                <button
-                    type="button"
-                    className="pinned-control-button"
                     title="Unpin note"
                     onClick={async () => {
                         await window.smartStickies.notes.unpin(note.id);

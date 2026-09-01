@@ -43,6 +43,17 @@ function Sidebar({
                 >
                     Folders
                 </button>
+
+                <button
+                    className={
+                        currentPage === "pinned"
+                        ? "sidebar-link active"
+                        : "sidebar-link"
+                    }
+                    onClick={() => onNavigate("pinned")}
+                >
+                    Pinned
+                </button>
             </nav>
         </aside>
     );

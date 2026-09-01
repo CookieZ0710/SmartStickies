@@ -73,6 +73,10 @@ ipcMain.handle("notes:pin", (event, id) => {
 
     if(changes > 0) {
         createPinnedWindow(id);
+
+        BrowserWindow.getAllWindows().forEach((window) => {
+            window.webContents.send("notes:pinStatusChanged", id);
+        });
     }
 
     return changes;
@@ -83,6 +87,10 @@ ipcMain.handle("notes:unpin", (event, id) => {
 
     if(changes > 0) {
         closePinnedWindow(id);
+
+        BrowserWindow.getAllWindows().forEach((window) => {
+            window.webContents.send("notes:pinStatusChanged", id);
+        });
     }
 
     return changes;

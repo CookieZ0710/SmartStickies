@@ -553,3 +553,9 @@
 .pinned-note-controls {
     -webkit-app-region: no-drag;
 }
+
+.pinned-note,
+.pinned-note .note-preview,
+.pinned-note .note-preview * {
+    color: #000;
+}
