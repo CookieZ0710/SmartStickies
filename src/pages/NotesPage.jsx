@@ -25,6 +25,20 @@ function NotesPage() {
         loadNotes();
     }, []);
 
+    useEffect(() => {
+        const handleOpenEditor = async (noteId) => {
+            const note = await window.smartStickies.notes.getById(noteId);
+
+            if(note) {
+                openEditModal(note);
+            }
+        };
+
+        const cleanup = window.smartStickies.notes.onOpenEditor(handleOpenEditor);
+        
+        return cleanup;
+    }, []);
+
     const openCreateModal = () => {
         setSelectedNote(null);
         setModalMode("create");

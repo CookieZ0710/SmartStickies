@@ -4,15 +4,17 @@ import fs from "fs";
 import path from "path";
 import { initializeDatabase } from "./db/database.js";
 import { importImage, saveClipboardImage } from "./services/imageService.js";
-import {createPinnedWindow, closePinnedWindow} from "./services/pinnedWindowManager.js";
+import { createPinnedWindow, closePinnedWindow } from "./services/pinnedWindowManager.js";
 import { getAllNotes, createNote, updateNote, deleteNote, moveNote, getNotesById, pinNote, unpinNote, getPinnedNotes } from "./services/noteService.js";
 import { getAllFolders, createFolder, updateFolder, deleteFolder } from "./services/folderService.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let mainWindow;
+
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
 
@@ -47,11 +49,15 @@ ipcMain.handle("notes:create", (event, title, content, color) => {
 });
 
 ipcMain.handle("notes:update", (event, id, title, content, color) => {
-    return updateNote(id, title, content, color);
+    const result = updateNote(id, title, content, color);
+    refreshPinnedWindow(id);
+    return result;
 });
 
 ipcMain.handle("notes:delete", (event, id) => {
-    return deleteNote(id);
+    const result = deleteNote(id);
+    closePinnedWindow(id);
+    return result;
 });
 
 ipcMain.handle("notes:move", (event, noteId, folderId) => {
@@ -85,6 +91,19 @@ ipcMain.handle("notes:unpin", (event, id) => {
 ipcMain.handle("notes:getPinned", () => {
     return getPinnedNotes();
 });
+
+ipcMain.handle("notes:openEditor", (event, noteId) => {
+    if(!mainWindow) return;
+
+    if(mainWindow.isMinimized()) {
+        mainWindow.restore();
+    }
+
+    mainWindow.show();
+    mainWindow.focus();
+
+    mainWindow.webContents.send("notes:openEditor", noteId);
+})
 
 // IPC FOR FOLDERS
 ipcMain.handle("folders:getAll", () => {
@@ -138,4 +157,10 @@ app.whenReady().then(() => {
         }
     );
     createWindow();
+
+    const pinnedNotes = getPinnedNotes();
+
+    for (const note of pinnedNotes) {
+        createPinnedWindow(note.id);
+    }
 });

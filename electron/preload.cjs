@@ -35,7 +35,32 @@ contextBridge.exposeInMainWorld("smartStickies", {
             ipcRenderer.invoke("notes:unpin", id),
 
         getPinned: () =>
-            ipcRenderer.invoke("notes:getPinned")
+            ipcRenderer.invoke("notes:getPinned"),
+
+        openEditor: (id) =>
+            ipcRenderer.invoke("notes:openEditor", id),
+
+        onRefreshPinned: (callback) => {
+            const handler = () => callback();
+
+            ipcRenderer.on("notes:refreshPinned", handler);
+
+            return () => {
+                ipcRenderer.removeListener("notes:refreshPinned", handler);
+            }
+        },
+
+        onOpenEditor: (callback) => {
+            const handler = (event, noteId) => {
+                callback(noteId);
+            }
+
+            ipcRenderer.on("notes:openEditor", handler);
+
+            return () => {
+                ipcRenderer.removeListener("notes:openEditor", handler);
+            };
+        }
         
     },
 

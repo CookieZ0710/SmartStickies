@@ -12,6 +12,9 @@ function PinnedNotePage() {
         };
 
         loadNote();
+
+        const cleanup = window.smartStickies.notes.onRefreshPinned(loadNote);
+        return cleanup;
     }, []);
 
     if (!note) {
@@ -30,6 +33,7 @@ function PinnedNotePage() {
                     type="button"
                     className="pinned-control-button"
                     title="Edit note"
+                    onClick={() => {window.smartStickies.notes.openEditor(note.id);}}
                 >
                     ✎
                 </button>

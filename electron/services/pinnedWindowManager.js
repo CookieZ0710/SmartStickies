@@ -21,8 +21,8 @@ export function createPinnedWindow(noteId) {
     }
 
     const pinnedWindow = new BrowserWindow({
-        width: 320,
-        height: 320,
+        width: 350,
+        height: 350,
         minWidth: 220,
         minHeight: 220,
         alwaysOnTop: true,
@@ -66,4 +66,14 @@ export function hasPinnedWindow(noteId) {
     const pinnedWindow = pinnedWindows.get(noteId);
 
     return Boolean(pinnedWindow && !pinnedWindow.isDestroyed());
+}
+
+export function refreshPinnedWindow(noteId) {
+    const pinnedWindow = pinnedWindows.get(noteId);
+
+    if(!pinnedWindow || pinnedWindow.isDestroyed()) {
+        return;
+    }
+
+    pinnedWindow.webContents.send("notes:refreshPinned");
 }

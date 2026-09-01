@@ -29,6 +29,10 @@ function NoteModal({
         mode === "edit" ? note?.folder_id ?? null : null
     );
 
+    const [isPinned, setIsPinned] = useState(
+        mode === "edit" ? Boolean(note?.is_pinned) : false
+    );
+
     const handleSubmit = () => {
         const serializedContent = JSON.stringify(content);
 
@@ -36,6 +40,18 @@ function NoteModal({
             onCreate(title, serializedContent, color, folderId);
         } else {
             onSave(note.id, title, serializedContent, color, folderId);
+        }
+    };
+
+    const handlePinToggle = async () => {
+        if(mode !== "edit") return;
+
+        if(isPinned) {
+            await window.smartStickies.notes.unpin(note.id);
+            setIsPinned(false);
+        }else {
+            await window.smartStickies.notes.pin(note.id);
+            setIsPinned(true);
         }
     };
 
@@ -103,6 +119,16 @@ function NoteModal({
                             />
                         ))}
                     </div>
+
+                    {mode === "edit" && (
+                        <button
+                            className="pin-button"
+                            onClick={handlePinToggle}
+                            title={isPinned ? "Unpin note" : "Pin note"}
+                        >
+                            {isPinned ? "📌" : "📍"}
+                        </button>
+                    )}
 
                     {mode === "edit" && (
                         <button
