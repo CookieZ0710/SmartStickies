@@ -7,6 +7,7 @@ import { importImage, saveClipboardImage } from "./services/imageService.js";
 import { createPinnedWindow, closePinnedWindow, refreshPinnedWindow } from "./services/pinnedWindowManager.js";
 import { getAllNotes, createNote, updateNote, deleteNote, moveNote, getNotesById, pinNote, unpinNote, getPinnedNotes } from "./services/noteService.js";
 import { getAllFolders, createFolder, updateFolder, deleteFolder } from "./services/folderService.js"
+import { getAllTags, createTag, updateTag, deleteTag, getTagsForNote, addTagToNote, removeTagFromNote } from "./services/tagServices.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -116,6 +117,36 @@ ipcMain.handle("folders:update", (event, id, name) => {
 
 ipcMain.handle("folders:delete", (event, id) => {
     return deleteFolder(id);
+});
+
+
+// IPC FOR TAGS
+ipcMain.handle("tags:getAll", () => {
+    return getAllTags();
+});
+
+ipcMain.handle("tags:create", (event, name) => {
+    return createTag(name);
+});
+
+ipcMain.handle("tags:update", (event, id, name) => {
+    return updateTag(id, name);
+});
+
+ipcMain.handle("tags:delete", (event, id) => {
+    return deleteTag(id);
+});
+
+ipcMain.handle("tags:getForNote", (event, noteId) => {
+    return getTagsForNote(noteId);
+});
+
+ipcMain.handle("tags:addToNote", (event, noteId, tagId) => {
+    return addTagToNote(noteId, tagId);
+}); 
+
+ipcMain.handle("tags:removeFromNote", (event, noteId, tagId) => {
+    return removeTagFromNote(noteId, tagId);
 });
 
 protocol.registerSchemesAsPrivileged([

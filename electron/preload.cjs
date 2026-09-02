@@ -71,5 +71,28 @@ contextBridge.exposeInMainWorld("smartStickies", {
 
         delete: (id) => 
             ipcRenderer.invoke("folders:delete", id)
+    },
+
+    tags: {
+        getAll: () =>
+            ipcRenderer.invoke("tags:getAll"),
+        
+        getForNote: (noteId) =>
+            ipcRenderer.invoke("tags:getForNote", noteId),
+
+        create: (name) =>
+            ipcRenderer.invoke("tags:create", name),
+
+        update: (id, name) => 
+            ipcRenderer.invoke("tags:update", id, name),
+
+        delete: (id) => 
+            ipcRenderer.invoke("tags:delete", id),
+
+        addToNote: (noteId, tagId) =>
+            ipcRenderer.invoke("tags:addToNote", noteId, tagId),
+
+        removeFromNote: (noteId, tagId) =>
+            ipcRenderer.invoke("tags:removeFromNote", noteId, tagId)
     }
 });
