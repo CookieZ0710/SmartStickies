@@ -6,6 +6,7 @@ function NoteModal({
     mode,
     note,
     folders = [],
+    tags = [],
     onClose,
     onCreate,
     onSave,
@@ -22,6 +23,22 @@ function NoteModal({
         : parseNoteContent("")
     );
 
+    const [selectedTags, setSelectedTags] = useState(
+        mode = "edit"
+        ? note?.tags?.map((tag) => tag.id) ?? []
+        : []
+    );
+
+    const toggleTag = (tagId) => {
+        setSelectedTags((currentTags) => {
+            if(currentTags.includes(tagId)) {
+                return currentTags.filter((id) => id !== tagId);
+            }
+
+            return [...currentTags, tagId];
+        })
+    };
+
     const [color, setColor] = useState(
         mode ==="edit" ? note?.color ?? "#FFE45C" : "#FFE45C"
     );
@@ -34,9 +51,9 @@ function NoteModal({
         const serializedContent = JSON.stringify(content);
 
         if(mode === "create") {
-            onCreate(title, serializedContent, color, folderId);
+            onCreate(title, serializedContent, color, folderId, selectedTags);
         } else {
-            onSave(note.id, title, serializedContent, color, folderId);
+            onSave(note.id, title, serializedContent, color, folderId, selectedTags);
         }
     };
 
@@ -87,6 +104,23 @@ function NoteModal({
                             </option>
                         ))}
                     </select>
+
+                    <div className="tag-selector">
+                        {tags.map((tag) => (
+                            <button
+                                key={tag.id}
+                                type="button"
+                                className={
+                                    selectedTags.includes(tag.id)
+                                        ? "tag-option selected"
+                                        : "tag-option"
+                                }
+                                onClick={() => toggleTag(tag.id)}
+                            >
+                                {tag.name}
+                            </button>
+                        ))}
+                    </div>
 
                     <div className="color-picker">
                         {[

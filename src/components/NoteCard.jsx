@@ -12,6 +12,14 @@ function NoteCard({note, folder, onClick}) {
                 <NotePreview content={note.content}/>
             </div>
 
+            <div className="note-tags">
+                {note.tags?.map((tag) => (
+                    <span key={tag.id} className="tag-chip">
+                        {tag.name}
+                    </span>
+                ))}
+            </div>
+
             <div className="note-folder-footer">
                 {folder?.name ?? ""}
             </div>

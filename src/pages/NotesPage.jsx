@@ -6,6 +6,7 @@ import NoteModal from "../components/NoteModal";
 function NotesPage() {
     const [notes, setNotes] = useState([]);
     const [folders, setFolders] = useState([]);
+    const [tags, setTags] = useState([]);
 
     const [modalMode, setModalMode] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
@@ -20,9 +21,15 @@ function NotesPage() {
         setNotes(savedNotes)
     };
 
+    const loadTags = async () => {
+        const savedTags = await window.smartStickies.tags.getAll();
+        setTags(savedTags);
+    }
+
     useEffect(() => {
         loadFolders();
         loadNotes();
+        loadTags();
     }, []);
 
     useEffect(() => {
@@ -48,8 +55,12 @@ function NotesPage() {
         setModalMode("create");
     };
 
-    const openEditModal = (note) => {
-        setSelectedNote(note);
+    const openEditModal = async (note) => {
+        const noteTags = await window.smartStickies.tags.getForNote(note.id);
+        setSelectedNote({
+            ...note,
+            tags: noteTags
+        });
         setModalMode("edit");
     };
 
@@ -58,18 +69,34 @@ function NotesPage() {
         setModalMode(null);
     };
 
-    const createNote = async (title, content, color, folderId) => {
+    const createNote = async (title, content, color, folderId, selectedTags) => {
         const newNote = await window.smartStickies.notes.create(title, content, color);
         if (folderId !== null) {
             await window.smartStickies.notes.move(newNote.id, folderId);
+        }
+        for(const tagid of selectedTags) {
+            await window.smartStickies.tags.addToNote(newNote.id, tagId);
         }
         await loadNotes();
         closeModal();
     };
 
-    const saveNote = async (id, title, content, color, folderId) => {
+    const saveNote = async (id, title, content, color, folderId, selectedTags) => {
         await window.smartStickies.notes.update(id, title, content, color);
         await window.smartStickies.notes.move(id, folderId);
+
+        const existingTags = await window.smartStickies.tags.getForNote(id);
+        const existingTagIds = existingTags.map((tag) => tag.id);
+        const tagsToAdd = selectedTags.filter((id) => !existingTagIds.includes(id));
+        const tagsToRemove = existingTagIds.filter((id) => !selectedTags.includes(id));
+
+        for(const tagId of tagsToAdd) {
+            await window.smartStickies.tags.addToNote(id,tagId);
+        }
+        for(const tagId of tagsToRemove) {
+            await window.smartStickies.tags.removeFromNotes(id,tagId);
+        }
+
         await loadNotes();
         closeModal();
     };
