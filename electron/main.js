@@ -44,6 +44,14 @@ ipcMain.handle("notes:getAll", () => {
     return getAllNotes();
 });
 
+ipcMain.handle("notes:getById", (event, id) => {
+    return getNotesById(id);
+});
+
+ipcMain.handle("notes:getPinned", () => {
+    return getPinnedNotes();
+});
+
 ipcMain.handle("notes:create", (event, title, content, color) => {
     return createNote(title, content, color);
 });
@@ -62,10 +70,6 @@ ipcMain.handle("notes:delete", (event, id) => {
 
 ipcMain.handle("notes:move", (event, noteId, folderId) => {
     return moveNote(noteId, folderId);
-});
-
-ipcMain.handle("notes:getById", (event, id) => {
-    return getNotesById(id);
 });
 
 ipcMain.handle("notes:pin", (event, id) => {
@@ -96,9 +100,6 @@ ipcMain.handle("notes:unpin", (event, id) => {
     return changes;
 });
 
-ipcMain.handle("notes:getPinned", () => {
-    return getPinnedNotes();
-});
 
 // IPC FOR FOLDERS
 ipcMain.handle("folders:getAll", () => {

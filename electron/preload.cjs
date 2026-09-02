@@ -15,6 +15,9 @@ contextBridge.exposeInMainWorld("smartStickies", {
 
         getById: (id) =>
             ipcRenderer.invoke("notes:getById", id),
+        
+        getPinned: () =>
+            ipcRenderer.invoke("notes:getPinned"),
 
         create: (title, content, color) => 
             ipcRenderer.invoke("notes:create", title, content, color),
@@ -33,9 +36,6 @@ contextBridge.exposeInMainWorld("smartStickies", {
 
         unpin: (id) =>
             ipcRenderer.invoke("notes:unpin", id),
-
-        getPinned: () =>
-            ipcRenderer.invoke("notes:getPinned"),
 
         onPinStatusChanged: (callback) => {
             const handler = (event, id) => callback(id);
