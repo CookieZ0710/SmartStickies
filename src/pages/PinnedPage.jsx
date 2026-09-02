@@ -36,7 +36,7 @@ function PinnedPage() {
     }, []);
 
     const openEditModal = (note) => {
-        setSelectedNote(null);
+        setSelectedNote(note);
     }
 
     const saveNote = async (

@@ -37,9 +37,6 @@ contextBridge.exposeInMainWorld("smartStickies", {
         getPinned: () =>
             ipcRenderer.invoke("notes:getPinned"),
 
-        openEditor: (id) =>
-            ipcRenderer.invoke("notes:openEditor", id),
-
         onPinStatusChanged: (callback) => {
             const handler = (event, id) => callback(id);
 
@@ -59,18 +56,6 @@ contextBridge.exposeInMainWorld("smartStickies", {
                 ipcRenderer.removeListener("notes:refreshPinned", handler);
             }
         },
-
-        onOpenEditor: (callback) => {
-            const handler = (event, noteId) => {
-                callback(noteId);
-            }
-
-            ipcRenderer.on("notes:openEditor", handler);
-
-            return () => {
-                ipcRenderer.removeListener("notes:openEditor", handler);
-            };
-        }
         
     },
 
