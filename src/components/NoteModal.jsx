@@ -24,7 +24,7 @@ function NoteModal({
     );
 
     const [selectedTags, setSelectedTags] = useState(
-        mode = "edit"
+        mode === "edit"
         ? note?.tags?.map((tag) => tag.id) ?? []
         : []
     );

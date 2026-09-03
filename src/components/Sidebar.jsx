@@ -54,6 +54,17 @@ function Sidebar({
                 >
                     Pinned
                 </button>
+
+                <button
+                    className={
+                        currentPage === "pinned"
+                        ? "sidebar-link active"
+                        : "sidebar-link"
+                    }
+                    onClick={() => onNavigate("tags")}
+                >
+                    Tags
+                </button>
             </nav>
         </aside>
     );

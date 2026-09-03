@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import NotesPage from './pages/NotesPage';
 import FoldersPage from './pages/FoldersPage';
 import PinnedPage from './pages/PinnedPage';
+import TagsPage from './pages/TagsPage';
 import PinnedNotePage from './pages/PinnedNotePage';
 
 import './App.css'
@@ -58,6 +59,10 @@ function App() {
 
             {currentPage === "pinned" && (
                 <PinnedPage />
+            )}
+
+            {currentPage === "tags" && (
+                <TagsPage />
             )}
         </div>
     );

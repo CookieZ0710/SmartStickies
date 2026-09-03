@@ -616,3 +616,101 @@
     color: #dcdcdc;
     font-size: 0.75rem;
 }
+
+.tags-page {
+    padding: 32px;
+    color: #f0f0f0;
+}
+
+.tags-header {
+    margin-bottom: 24px;
+}
+
+.tags-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.tag-create-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.tag-create-section input {
+    flex: 1;
+    max-width: 320px;
+    padding: 10px 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #1f1f1f;
+    color: #f0f0f0;
+}
+
+.tag-create-section button {
+    padding: 10px 16px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #2f2f2f;
+    color: #f0f0f0;
+    cursor: pointer;
+}
+
+.tag-create-section button:hover {
+    background-color: #3a3a3a;
+}
+
+.tags-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+}
+
+.tag-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 16px;
+
+    border: 1px solid #444;
+    border-radius: 8px;
+
+    background-color: #2b2b2b;
+}
+
+.tag-name {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background-color: #3a3a3a;
+    font-size: 0.9rem;
+}
+
+.tag-item input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #1f1f1f;
+    color: #f0f0f0;
+}
+
+.tag-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.tag-actions button {
+    padding: 6px 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #333;
+    color: #f0f0f0;
+    cursor: pointer;
+}
+
+.tag-actions button:hover {
+    background-color: #444;
+}

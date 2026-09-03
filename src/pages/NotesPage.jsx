@@ -18,7 +18,16 @@ function NotesPage() {
 
     const loadNotes = async () => {
         const savedNotes = await window.smartStickies.notes.getAll();
-        setNotes(savedNotes)
+        const notesWithTags = await Promise.all(
+            savedNotes.map(async (note) => {
+                const noteTags = await window.smartStickies.tags.getForNote(note.id);
+                return{
+                    ...note,
+                    tags: noteTags
+                };
+            })
+        );
+        setNotes(notesWithTags)
     };
 
     const loadTags = async () => {
@@ -74,7 +83,7 @@ function NotesPage() {
         if (folderId !== null) {
             await window.smartStickies.notes.move(newNote.id, folderId);
         }
-        for(const tagid of selectedTags) {
+        for(const tagId of selectedTags) {
             await window.smartStickies.tags.addToNote(newNote.id, tagId);
         }
         await loadNotes();
@@ -94,7 +103,7 @@ function NotesPage() {
             await window.smartStickies.tags.addToNote(id,tagId);
         }
         for(const tagId of tagsToRemove) {
-            await window.smartStickies.tags.removeFromNotes(id,tagId);
+            await window.smartStickies.tags.removeFromNote(id,tagId);
         }
 
         await loadNotes();
@@ -153,6 +162,7 @@ function NotesPage() {
             mode={modalMode}
             note={selectedNote}
             folders={folders}
+            tags={tags}
             onClose={closeModal}
             onCreate={createNote}
             onSave={saveNote}
