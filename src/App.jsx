@@ -27,11 +27,20 @@ function App() {
     
     const [currentPage, setCurrentPage] = useState("notes");
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    // kinda weird to put this here for now
+    const [selectedTagId, setSelectedTagId] = useState("");
 
     const handleNavigate = (page) => {
         setCurrentPage(page);
         setSidebarOpen(false);
     };
+
+    const handleTagLink = (tagId) => {
+        setSelectedTagId(String(tagId));
+        setCurrentPage("notes");
+    };
+
+    
 
     return(
         <div className="app">
@@ -50,7 +59,7 @@ function App() {
             />
 
             {currentPage === "notes" && (
-                <NotesPage />
+                <NotesPage initialTagFilter={selectedTagId}/>
             )}
 
             {currentPage === "folders" && (
@@ -62,7 +71,7 @@ function App() {
             )}
 
             {currentPage === "tags" && (
-                <TagsPage />
+                <TagsPage onTagClick={handleTagLink}/>
             )}
         </div>
     );

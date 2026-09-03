@@ -714,3 +714,41 @@
 .tag-actions button:hover {
     background-color: #444;
 }
+
+.notes-header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.tag-filter-select {
+    padding: 8px 12px;
+
+    border: 1px solid #555;
+    border-radius: 6px;
+
+    background-color: #222;
+    color: #eee;
+
+    font-size: 0.9rem;
+
+    cursor: pointer;
+}
+
+.tag-filter-select:hover {
+    border-color: #777;
+}
+
+.tag-filter-select:focus {
+    outline: none;
+    border-color: #999;
+}
+
+.tag-link {
+    border: none;
+    cursor: pointer;
+}
+
+.tag-link:hover {
+    background-color: #555;
+}

@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import NoteCard from "../components/NoteCard";
 import NoteModal from "../components/NoteModal";
 
-function NotesPage() {
+function NotesPage({ initialTagFilter = ""}) {
     const [notes, setNotes] = useState([]);
     const [folders, setFolders] = useState([]);
     const [tags, setTags] = useState([]);
 
     const [modalMode, setModalMode] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
+    const [selectedTagFilter, setSelectedTagFilter] = useState(initialTagFilter);
 
     const loadFolders = async () => {
         const savedFolders = await window.smartStickies.folders.getAll();
@@ -40,6 +41,10 @@ function NotesPage() {
         loadNotes();
         loadTags();
     }, []);
+
+    useEffect(() => {
+        setSelectedTagFilter(initialTagFilter);
+    }, [initialTagFilter]);
 
     useEffect(() => {
     const cleanup =
@@ -116,6 +121,14 @@ function NotesPage() {
         closeModal();
     };
 
+    const filteredNotes = selectedTagFilter
+        ? notes.filter((note) => 
+            note.tags?.some(
+                (tag) => tag.id ===Number(selectedTagFilter)
+            )
+        )
+        : notes;
+
     const togglePin = async (note) => {
         if(note.is_pinned) {
             await window.smartStickies.notes.unpin(note.id);
@@ -132,7 +145,30 @@ function NotesPage() {
     return (
         <main className="notes-page">
         <header className="page-header">
+        <div className="notes-header-left">
             <h1>Notes</h1>
+
+            <select
+                className="tag-filter-select"
+                value={selectedTagFilter}
+                onChange={(e) =>
+                    setSelectedTagFilter(e.target.value)
+                }
+            >
+                <option value="">
+                    All Tags
+                </option>
+
+                {tags.map((tag) => (
+                    <option
+                        key={tag.id}
+                        value={tag.id}
+                    >
+                        {tag.name}
+                    </option>
+                ))}
+            </select>
+        </div>
 
             <button onClick={openCreateModal}>
                 + New Note
@@ -140,7 +176,7 @@ function NotesPage() {
         </header>
 
         <section className="note-grid">
-            {notes.map((note) => {
+            {filteredNotes.map((note) => {
                 const folder = folders.find(
                 (folder) =>
                     folder.id === note.folder_id

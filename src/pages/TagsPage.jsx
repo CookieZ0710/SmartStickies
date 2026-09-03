@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function TagsPage() {
+function TagsPage({ onTagClick }) {
     const [tags, setTags] = useState([]);
     const [newTagName, setNewTagName] = useState("");
     const [editingTagId, setEditingTagId] = useState(null);
@@ -137,9 +137,13 @@ function TagsPage() {
                             </>
                         ) : (
                             <>
-                                <span className="tag-name">
+                                <button
+                                    type="button"
+                                    className="tag-name tag-link"
+                                    onClick={() => onTagClick(tag.id)}
+                                >
                                     {tag.name}
-                                </span>
+                                </button>
 
                                 <div className="tag-actions">
                                     <button
