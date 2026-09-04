@@ -752,3 +752,17 @@
 .tag-link:hover {
     background-color: #555;
 }
+
+.note-search {
+    width: 220px;
+    padding: 8px 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #222;
+    color: #eee;
+}
+
+.note-search:focus {
+    outline: none;
+    border-color: #999;
+}

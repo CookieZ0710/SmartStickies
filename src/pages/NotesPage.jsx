@@ -11,6 +11,7 @@ function NotesPage({ initialTagFilter = ""}) {
     const [modalMode, setModalMode] = useState(null);
     const [selectedNote, setSelectedNote] = useState(null);
     const [selectedTagFilter, setSelectedTagFilter] = useState(initialTagFilter);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const loadFolders = async () => {
         const savedFolders = await window.smartStickies.folders.getAll();
@@ -121,13 +122,46 @@ function NotesPage({ initialTagFilter = ""}) {
         closeModal();
     };
 
-    const filteredNotes = selectedTagFilter
-        ? notes.filter((note) => 
-            note.tags?.some(
-                (tag) => tag.id ===Number(selectedTagFilter)
-            )
-        )
-        : notes;
+    const extractText = (content) => {
+        try {
+            const json =
+                typeof content === "string"
+                    ? JSON.parse(content)
+                    : content;
+
+            let text = "";
+
+            const walk = (node) => {
+                if (!node) return;
+
+                if (node.type === "text" && node.text) {
+                    text += node.text + " ";
+                }
+
+                node.content?.forEach(walk);
+            };
+
+            walk(json);
+
+            return text;
+        } catch {
+            return String(content ?? "");
+        }
+    };
+
+    const filteredNotes = notes.filter((note) => {
+        const matchesTag = !selectedTagFilter || note.tags?.some(
+            (tag) => tag.id === Number(selectedTagFilter)
+        );
+        const query = searchQuery.trim().toLowerCase();
+        const noteText = extractText(note.content).toLowerCase();
+
+        const matchesSearch = 
+            note.title?.toLowerCase().includes(query) ||
+            noteText.includes(query);
+
+        return matchesTag && matchesSearch;
+    });
 
     const togglePin = async (note) => {
         if(note.is_pinned) {
@@ -168,6 +202,14 @@ function NotesPage({ initialTagFilter = ""}) {
                     </option>
                 ))}
             </select>
+
+            <input
+                type="text"
+                className="note-search"
+                placeholder="Search notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
         </div>
 
             <button onClick={openCreateModal}>
