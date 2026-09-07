@@ -57,6 +57,9 @@ function NoteModal({
         }
     };
 
+    const [showTags, setShowTags] = useState(false);
+    const [showColors, setShowColors] = useState(false);
+
 
     return (
         <div
@@ -105,39 +108,71 @@ function NoteModal({
                         ))}
                     </select>
 
-                    <div className="tag-selector">
-                        {tags.map((tag) => (
-                            <button
-                                key={tag.id}
-                                type="button"
-                                className={
-                                    selectedTags.includes(tag.id)
-                                        ? "tag-option selected"
-                                        : "tag-option"
-                                }
-                                onClick={() => toggleTag(tag.id)}
-                            >
-                                {tag.name}
-                            </button>
-                        ))}
-                    </div>
+                    <div className="popup-control">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setShowTags(!showTags);
+                                setShowColors(false);
+                            }}
+                        >
+                            🏷 Tags
+                        </button>
 
-                    <div className="color-picker">
-                        {[
-                            "#FFE45C",
-                            "#FF5A5A",
-                            "#4DA3FF",
-                            "#66D17A",
-                            "#B388FF",
-                            "#FF9F43"
-                        ].map((option) => (
+                        <div className="popup-control">
                             <button
-                            key={option}
-                            className="color-option"
-                            style={{ backgroundColor: option }}
-                            onClick={() => setColor(option)}
-                            />
-                        ))}
+                                type="button"
+                                onClick={() => {
+                                    setShowColors(!showColors);
+                                    setShowTags(false);
+                                }}
+                            >
+                                🎨 Color
+                            </button>
+
+                            {showColors && (
+                                <div className="popup-menu color-popup">
+                                    {[
+                                        "#FFE45C",
+                                        "#FF5A5A",
+                                        "#4DA3FF",
+                                        "#66D17A",
+                                        "#B388FF",
+                                        "#FF9F43"
+                                    ].map((option) => (
+                                        <button
+                                            key={option}
+                                            type="button"
+                                            className="color-option"
+                                            style={{ backgroundColor: option }}
+                                            onClick={() => {
+                                                setColor(option);
+                                                setShowColors(false);
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {showTags && (
+                            <div className="popup-menu tag-popup">
+                                {tags.map((tag) => (
+                                    <button
+                                        key={tag.id}
+                                        type="button"
+                                        className={
+                                            selectedTags.includes(tag.id)
+                                                ? "tag-option selected"
+                                                : "tag-option"
+                                        }
+                                        onClick={() => toggleTag(tag.id)}
+                                    >
+                                        {tag.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {mode === "edit" && (
