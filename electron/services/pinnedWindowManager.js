@@ -1,5 +1,5 @@
 import path from "path";
-import { BrowserWindow } from "electron";
+import { app, BrowserWindow } from "electron";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,9 +38,22 @@ export function createPinnedWindow(noteId) {
     });
 
     pinnedWindows.set(noteId, pinnedWindow);
-    const devUrl = `http://localhost:5173/?pinnedNote=${noteId}`;
+    if (app.isPackaged) {
+        pinnedWindow.loadFile(
+            path.join(__dirname, "../../dist/index.html"),
+            {
+                query: {
+                    pinnedNote: String(noteId),
+                },
+            }
+        );
 
-    pinnedWindow.loadURL(devUrl);
+    } else {
+        pinnedWindow.loadURL(
+            `http://localhost:5173/?pinnedNote=${noteId}`
+        );
+    }
+
     pinnedWindow.on("closed", () => {
         pinnedWindows.delete(noteId);
     });
