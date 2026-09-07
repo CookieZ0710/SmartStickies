@@ -57,7 +57,7 @@ function Sidebar({
 
                 <button
                     className={
-                        currentPage === "pinned"
+                        currentPage === "tags"
                         ? "sidebar-link active"
                         : "sidebar-link"
                     }
