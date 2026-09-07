@@ -193,6 +193,14 @@
     0 8px 18px rgba(0, 0, 0, 0.32);
 }
 
+.note-card[draggable="true"] {
+  cursor: grab;
+}
+
+.note-card[draggable="true"]:active {
+  cursor: grabbing;
+}
+
 .note-card-content {
   flex: 1;
 }
@@ -303,6 +311,11 @@
 
 .folder-section {
   margin-bottom: 55px;
+}
+
+.folder-section.drop-target {
+  outline: 2px dashed #d7b95b;
+  outline-offset: 8px;
 }
 
 .folder-section-header {

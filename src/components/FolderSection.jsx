@@ -1,4 +1,5 @@
 import NoteCard from "./NoteCard";
+import { useState } from "react";
 
 function FolderSection({
     folder,
@@ -6,9 +7,52 @@ function FolderSection({
     onEditFolder,
     onDeleteFolder,
     onNoteClick,
+    onMoveNote,
 }) {
+    const [isDropTarget, setIsDropTarget] = useState(false);
+
+    const handleDragStart = (event, note) => {
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("application/x-smartstickies-note-id", String(note.id));
+        event.dataTransfer.setData("text/plain", String(note.id));
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        setIsDropTarget(true);
+    };
+
+    const handleDragLeave = (event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsDropTarget(false);
+        }
+    };
+
+    const handleDrop = async (event) => {
+        event.preventDefault();
+        setIsDropTarget(false);
+
+        const noteId = Number(
+            event.dataTransfer.getData("application/x-smartstickies-note-id")
+        );
+
+        if (Number.isInteger(noteId)) {
+            await onMoveNote(noteId, folder.id);
+        }
+    };
+
     return (
-        <section className="folder-section">
+        <section
+            className={
+                isDropTarget
+                    ? "folder-section drop-target"
+                    : "folder-section"
+            }
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+        >
             <div className="folder-section-header">
                 <h2>{folder.name}</h2>
 
@@ -32,6 +76,8 @@ function FolderSection({
                             key={note.id}
                             note={note}
                             onClick={onNoteClick}
+                            onDragStart={handleDragStart}
+                            onDragEnd={() => setIsDropTarget(false)}
                         />
                     ))
                 ) : (

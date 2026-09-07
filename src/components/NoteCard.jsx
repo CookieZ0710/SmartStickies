@@ -1,11 +1,14 @@
 import NotePreview from "./NotePreview";
 
-function NoteCard({note, folder, onClick}) {
+function NoteCard({ note, folder, onClick, onDragStart, onDragEnd }) {
     return (
-        <div 
-            className="note-card" 
-            style={{backgroundColor: note.color ?? "#FFE45C"}}
+        <div
+            className="note-card"
+            style={{ backgroundColor: note.color ?? "#FFE45C" }}
             onClick={() => onClick(note)}
+            draggable={Boolean(onDragStart)}
+            onDragStart={(event) => onDragStart?.(event, note)}
+            onDragEnd={onDragEnd}
         >
             <div className="note-card-content">
                 <h2>{note.title || "Untitled"}</h2>

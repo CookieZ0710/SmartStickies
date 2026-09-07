@@ -87,6 +87,17 @@ function FoldersPage(){
         closeNoteModal();
     };
 
+    const moveNote = async (noteId, folderId) => {
+        const note = notes.find((item) => item.id === noteId);
+
+        if (!note || note.folder_id === folderId) {
+            return;
+        }
+
+        await window.smartStickies.notes.move(noteId, folderId);
+        await loadNotes();
+    };
+
     const uncategorizedNotes = notes.filter(
         (note) => note.folder_id === null
     );
@@ -114,6 +125,7 @@ function FoldersPage(){
                         onEditFolder={openEditFolderModal}
                         onDeleteFolder={deleteFolder}
                         onNoteClick={openNoteModal}
+                        onMoveNote={moveNote}
                     />
                 );
             })}
@@ -127,6 +139,7 @@ function FoldersPage(){
                 onEditFolder={() => {}}
                 onDeleteFolder={() => {}}
                 onNoteClick={openNoteModal}
+                onMoveNote={moveNote}
             />
 
             {folderModalMode && (
